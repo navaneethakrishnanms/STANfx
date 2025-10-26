@@ -1,0 +1,113 @@
+================================================================================
+STEP BY STEP FIX FOR MASK FEATURE
+================================================================================
+
+OPEN FILE: static/js/editor.js
+
+================================================================================
+STEP 1: Remove OLD code from startDrawing method (around line 717)
+================================================================================
+
+FIND THIS (3 lines to DELETE):
+        } else if (this.currentTool === 'mask') {
+            this.isMasking = true;
+            this.maskPath = [pos];
+        }
+
+DELETE those 3 lines completely!
+
+After deletion, the method should end with:
+        } else if (this.currentTool === 'shape' && !this.isDraggingShape) {
+            this.isDrawingShape = true;
+            this.shapeStart = pos;
+            this.shapeEnd = pos;
+        }
+    }
+
+================================================================================
+STEP 2: Remove OLD code from draw method (around line 748)
+================================================================================
+
+FIND THIS (3 lines to DELETE):
+        } else if (this.currentTool === 'mask' && this.isMasking) {
+            this.maskPath.push(pos);
+            this.drawMaskPath();
+        }
+
+DELETE those 3 lines completely!
+
+After deletion, the method should end with:
+            this.drawShapePreview(this.shapeStart.x, this.shapeStart.y, this.shapeEnd.x, this.shapeEnd.y);
+        }
+    }
+
+================================================================================
+STEP 3: Remove OLD code from stopDrawing method (around line 791)
+================================================================================
+
+FIND THIS (2 lines to DELETE):
+        } else if (this.currentTool === 'mask' && this.isMasking) {
+            this.isMasking = false;
+        }
+
+DELETE those 2 lines completely!
+
+================================================================================
+STEP 4: REPLACE OLD mask methods (around line 1074-1110)
+================================================================================
+
+FIND AND DELETE these 3 OLD methods (approximately 37 lines):
+
+    // NEW: Mask feature methods
+    drawMaskPath() {
+        this.drawCtx.clearRect(0, 0, this.drawingCanvas.width, this.drawingCanvas.height);
+        if (this.maskPath.length < 2) return;
+        this.drawCtx.strokeStyle = '#00ff00';
+        this.drawCtx.lineWidth = 3;
+        this.drawCtx.lineCap = 'round';
+        this.drawCtx.lineJoin = 'round';
+        this.drawCtx.beginPath();
+        this.drawCtx.moveTo(this.maskPath[0].x, this.maskPath[0].y);
+        for (let i = 1; i < this.maskPath.length; i++) {
+            this.drawCtx.lineTo(this.maskPath[i].x, this.maskPath[i].y);
+        }
+        this.drawCtx.stroke();
+    }
+    
+    applyMask() {
+        if (this.maskPath.length < 3) {
+            alert('Please draw a mask path first');
+            return;
+        }
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = this.canvas.width;
+        tempCanvas.height = this.canvas.height;
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCtx.putImageData(this.currentImage, 0, 0);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.save();
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.maskPath[0].x, this.maskPath[0].y);
+        for (let i = 1; i < this.maskPath.length; i++) {
+            this.ctx.lineTo(this.maskPath[i].x, this.maskPath[i].y);
+        }
+        this.ctx.closePath();
+        this.ctx.clip();
+        this.ctx.drawImage(tempCanvas, 0, 0);
+        this.ctx.restore();
+        this.currentImage = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+        this.maskPath = [];
+        this.drawCtx.clearRect(0, 0, this.drawingCanvas.width, this.drawingCanvas.height);
+        this.saveHistory();
+    }
+    
+    clearMask() {
+        this.maskPath = [];
+        this.drawCtx.clearRect(0, 0, this.drawingCanvas.width, this.drawingCanvas.height);
+    }
+
+THEN ADD the NEW methods from mask-methods.js file in the SAME location!
+
+================================================================================
+SAVE THE FILE AND TEST!
+================================================================================

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STANfx Editor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-editor.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="editor-container">
+        <div class="editor-header">
+            <div class="logo">STANfx</div>
+            <div class="header-actions">
+                <button id="undoBtn" class="btn btn-undo" title="Undo (Ctrl+Z)">
+                    <i class="fas fa-undo"></i> Undo
+                </button>
+                <button id="redoBtn" class="btn btn-redo" title="Redo (Ctrl+Y)">
+                    <i class="fas fa-redo"></i> Redo
+                </button>
+                <button id="saveBtn" class="btn btn-save">
+                    <i class="fas fa-save"></i> Save to Gallery
+                </button>
+            </div>
+        </div>
+
+        <div class="editor-main">
+            <div class="sidebar-left">
+                <div class="tool-section">
+                    <button class="tool-btn active" data-tool="crop" title="Crop">
+                        <i class="fas fa-crop"></i>
+                        <span>Crop</span>
+                    </button>
+                    <button class="tool-btn" data-tool="flip" title="Flip">
+                        <i class="fas fa-arrows-alt-h"></i>
+                        <span>Flip</span>
+                    </button>
+                    <button class="tool-btn" data-tool="rotate" title="Rotate">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Rotate</span>
+                    </button>
+                    <button class="tool-btn" data-tool="draw" title="Draw">
+                        <i class="fas fa-pen"></i>
+                        <span>Draw</span>
+                    </button>
+                    <button class="tool-btn" data-tool="text" title="Text">
+                        <i class="fas fa-font"></i>
+                        <span>Text</span>
+                    </button>
+                    <button class="tool-btn" data-tool="shape" title="Shape">
+                        <i class="fas fa-shapes"></i>
+                        <span>Shape</span>
+                    </button>
+                    <button class="tool-btn" data-tool="filter" title="Filter">
+                        <i class="fas fa-adjust"></i>
+                        <span>Filter</span>
+                    </button>
+                    <button class="tool-btn" data-tool="mask" title="Mask">
+                        <i class="fas fa-mask"></i>
+                        <span>Mask</span>
+                    </button>
+                    <button class="tool-btn" data-tool="collage" title="Collage">
+                        <i class="fas fa-th"></i>
+                        <span>Collage</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="canvas-area">
+                <div class="canvas-wrapper">
+                    <canvas id="mainCanvas"></canvas>
+                    <canvas id="drawingCanvas"></canvas>
+                </div>
+            </div>
+
+            <div class="sidebar-right">
+                <div class="tool-options" id="cropOptions">
+                    <h3>Crop Image</h3>
+                    <button id="applyCrop" class="btn-option">Apply Crop</button>
+                    <button id="cancelCrop" class="btn-option btn-secondary">Cancel</button>
+                </div>
+
+                <div class="tool-options" id="flipOptions" style="display:none;">
+                    <h3>Flip Image</h3>
+                    <button id="flipHorizontal" class="btn-option">
+                        <i class="fas fa-arrows-alt-h"></i> Flip Horizontal
+                    </button>
+                    <button id="flipVertical" class="btn-option">
+                        <i class="fas fa-arrows-alt-v"></i> Flip Vertical
+                    </button>
+                </div>
+
+                <div class="tool-options" id="rotateOptions" style="display:none;">
+                    <h3>Rotate Image</h3>
+                    <button id="rotateLeft" class="btn-option">
+                        <i class="fas fa-undo"></i> Rotate Left 90°
+                    </button>
+                    <button id="rotateRight" class="btn-option">
+                        <i class="fas fa-redo"></i> Rotate Right 90°
+                    </button>
+                    <label>Custom Angle:</label>
+                    <input type="range" id="rotateSlider" min="-180" max="180" value="0">
+                    <span id="rotateValue">0°</span>
+                    <button id="applyRotate" class="btn-option">Apply Rotation</button>
+                </div>
+
+                <div class="tool-options" id="drawOptions" style="display:none;">
+                    <h3>Drawing Tools</h3>
+                    <label>Brush Size:</label>
+                    <input type="range" id="brushSize" min="1" max="50" value="5">
+                    <span id="brushSizeValue">5</span>
+                    <label>Color:</label>
+                    <input type="color" id="drawColor" value="#000000">
+                    <button id="clearDrawing" class="btn-option btn-secondary">Clear Drawing</button>
+                </div>
+
+                <div class="tool-options" id="textOptions" style="display:none;">
+                    <h3>Add Text</h3>
+                    <input type="text" id="textInput" placeholder="Enter text">
+                    <label>Font Size:</label>
+                    <input type="range" id="fontSize" min="10" max="100" value="30">
+                    <span id="fontSizeValue">30</span>
+                    <label>Color:</label>
+                    <input type="color" id="textColor" value="#000000">
+                    <label>Font:</label>
+                    <select id="fontFamily">
+                        <option value="Arial">Arial</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Verdana">Verdana</option>
+                    </select>
+                    <button id="addText" class="btn-option">Add Text</button>
+                </div>
+
+                <div class="tool-options" id="shapeOptions" style="display:none;">
+                    <h3>Draw Shape</h3>
+                    <label>Shape Type:</label>
+                    <select id="shapeType">
+                        <option value="rectangle">Rectangle</option>
+                        <option value="circle">Circle</option>
+                        <option value="line">Line</option>
+                    </select>
+                    <label>Fill Color:</label>
+                    <input type="color" id="shapeFillColor" value="#ff0000">
+                    <label>Stroke Color:</label>
+                    <input type="color" id="shapeStrokeColor" value="#000000">
+                    <label>Stroke Width:</label>
+                    <input type="range" id="shapeStrokeWidth" min="1" max="20" value="2">
+                    <span id="shapeStrokeValue">2</span>
+                    <label>
+                        <input type="checkbox" id="shapeFilled" checked> Fill Shape
+                    </label>
+                </div>
+
+                <div class="tool-options" id="filterOptions" style="display:none;">
+                    <h3>Filters</h3>
+                    <label>Brightness:</label>
+                    <input type="range" id="brightness" min="0" max="200" value="100">
+                    <span id="brightnessValue">100</span>
+                    
+                    <label>Contrast:</label>
+                    <input type="range" id="contrast" min="0" max="200" value="100">
+                    <span id="contrastValue">100</span>
+                    
+                    <label>Saturation:</label>
+                    <input type="range" id="saturation" min="0" max="200" value="100">
+                    <span id="saturationValue">100</span>
+                    
+                    <label>Blur:</label>
+                    <input type="range" id="blur" min="0" max="10" value="0">
+                    <span id="blurValue">0</span>
+                    
+                    <label>Noise:</label>
+                    <input type="range" id="noise" min="0" max="100" value="0">
+                    <span id="noiseValue">0</span>
+                    
+                    <button id="applyFilters" class="btn-option">Apply Filters</button>
+                    <button id="resetFilters" class="btn-option btn-secondary">Reset Filters</button>
+                    
+                    <hr>
+                    <h4>Quick Filters:</h4>
+                    <button class="btn-option btn-filter" data-filter="grayscale">Grayscale</button>
+                    <button class="btn-option btn-filter" data-filter="sepia">Sepia</button>
+                    <button class="btn-option btn-filter" data-filter="invert">Invert</button>
+                </div>
+
+                <div class="tool-options" id="maskOptions" style="display:none;">
+                    <h3>Mask/Overlay Image</h3>
+                    <p>Add another image on top of your current image. You can resize and move it.</p>
+                    
+                    <label>Upload Mask Image:</label>
+                    <input type="file" id="maskImageUpload" accept="image/*">
+                    
+                    <div id="maskImagePreview" style="margin: 10px 0; padding: 10px; background: #34495e; border-radius: 4px; display: none;">
+                        <img id="maskPreviewImg" style="max-width: 100%; border-radius: 4px;">
+                        <p style="margin-top: 5px; font-size: 12px; color: #bdc3c7;">Click and drag to move. Drag corners to resize.</p>
+                    </div>
+                    
+                    <label>Opacity:</label>
+                    <input type="range" id="maskOpacity" min="0" max="100" value="100">
+                    <span id="maskOpacityValue">100%</span>
+                    
+                    <button id="applyMask" class="btn-option" style="display:none;">Apply Mask to Image</button>
+                    <button id="removeMask" class="btn-option btn-secondary" style="display:none;">Remove Mask</button>
+                </div>
+
+                <div class="tool-options" id="collageOptions" style="display:none;">
+                    <h3>Create Collage</h3>
+                    <p>Upload images to create a collage:</p>
+                    
+                    <label>Image 1:</label>
+                    <input type="file" id="collageImage1" accept="image/*">
+                    
+                    <label>Image 2:</label>
+                    <input type="file" id="collageImage2" accept="image/*">
+                    
+                    <label>Image 3:</label>
+                    <input type="file" id="collageImage3" accept="image/*">
+                    
+                    <label>Image 4:</label>
+                    <input type="file" id="collageImage4" accept="image/*">
+                    
+                    <div id="collagePreview" style="margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+                        0/4 images loaded
+                    </div>
+                    
+                    <label>Layout:</label>
+                    <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+                        <button class="btn-option collage-layout-btn selected" data-layout="grid" style="flex: 1; padding: 8px;" title="2x2 Grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="btn-option collage-layout-btn" data-layout="vertical" style="flex: 1; padding: 8px;" title="Vertical Split">
+                            <i class="fas fa-grip-vertical"></i>
+                        </button>
+                        <button class="btn-option collage-layout-btn" data-layout="horizontal" style="flex: 1; padding: 8px;" title="Horizontal Split">
+                            <i class="fas fa-grip-horizontal"></i>
+                        </button>
+                        <button class="btn-option collage-layout-btn" data-layout="triple" style="flex: 1; padding: 8px;" title="Triple Layout">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                    </div>
+                    
+                    <button id="createCollage" class="btn-option">Create Collage</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Gallery - STANfx</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial; background: linear-gradient(135deg, #667eea, #764ba2); min-height: 100vh; }
+.navbar { background: white; padding: 15px 30px; display: flex; justify-content: space-between; }
+.logo { font-size: 24px; font-weight: bold; color: #667eea; }
+.nav-links a { margin-left: 20px; color: #333; text-decoration: none; }
+.container { max-width: 1200px; margin: 40px auto; padding: 20px; }
+h1 { color: white; text-align: center; margin-bottom: 30px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+.gallery-item { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.gallery-item img { width: 100%; height: 250px; object-fit: cover; }
+.no-images { text-align: center; color: white; font-size: 20px; padding: 60px; background: rgba(255,255,255,0.1); border-radius: 10px; }
+</style>
+</head>
+<body>
+<div class="navbar">
+<div class="logo">STANfx</div>
+<div class="nav-links">
+<a href="/upload">Upload</a>
+<a href="/dashboard">Gallery</a>
+<a href="/logout">Logout</a>
+</div>
+</div>
+<div class="container">
+<h1>My Gallery</h1>
+{% if images %}
+<div class="gallery">
+{% for image in images %}
+<div class="gallery-item">
+<img src="{{ url_for('get_uploaded_image', filename=image.filename) }}" alt="Image">
+</div>
+{% endfor %}
+</div>
+{% else %}
+<div class="no-images">
+<i class="fas fa-images" style="font-size: 60px; margin-bottom: 20px; display: block;"></i>
+<p>No images yet. Upload and edit your first image!</p>
+</div>
+{% endif %}
+</div>
+</body>
+</html>

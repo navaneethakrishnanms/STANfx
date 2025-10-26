@@ -1,0 +1,97 @@
+================================================================================
+EDITOR FIXES COMPLETED - FINAL INSTRUCTIONS
+================================================================================
+
+WHAT I FIXED:
+-------------
+1. ✅ LEFT SIDEBAR SCROLLING 
+   - The sidebar now scrolls so you can see ALL tools including Collage
+   - Modified: static/css/style-editor.css
+
+2. ✅ HTML MASK UI UPDATED
+   - Changed from "cut/clip" to "overlay/add image"
+   - Added file upload, opacity slider, preview
+   - Modified: templates/editor.html
+
+3. ✅ NEW MASK METHODS CREATED
+   - All new JavaScript methods for overlay functionality
+   - Saved in: static/js/mask-methods.js
+
+================================================================================
+WHAT YOU NEED TO DO:
+================================================================================
+
+The JavaScript file (editor.js) needs the old mask methods REPLACED with new ones.
+
+MANUAL STEPS:
+-------------
+
+STEP 1: Open static/js/editor.js
+
+STEP 2: Search for "// NEW: Mask feature methods" (around line 1074)
+
+STEP 3: DELETE these 3 old methods:
+   - drawMaskPath()
+   - applyMask() [the old version]
+   - clearMask()
+   
+   They are approximately lines 1074-1110
+
+STEP 4: Open static/js/mask-methods.js
+
+STEP 5: Copy ALL the content from mask-methods.js
+
+STEP 6: Paste it in editor.js where you deleted the old methods
+
+STEP 7: Save editor.js
+
+================================================================================
+OR USE THIS QUICK FIX:
+================================================================================
+
+Delete lines 1074-1110 in editor.js (the old mask methods) and add this at the same location:
+
+[Copy everything from mask-methods.js file]
+
+================================================================================
+NEW MASK FEATURE DOES:
+================================================================================
+
+✓ Upload a second image to overlay on your main image
+✓ Drag the overlay image to position it anywhere
+✓ Resize the overlay by dragging corner handles (green squares)
+✓ Adjust transparency with the opacity slider
+✓ "Apply Mask" button to merge it permanently
+✓ "Remove Mask" button to cancel and remove overlay
+
+================================================================================
+TESTING AFTER FIX:
+================================================================================
+
+1. Refresh your browser (Ctrl + F5)
+2. Upload and open an image in editor
+3. Scroll down in left sidebar to see Collage button (now visible!)
+4. Click "Mask" button in left sidebar
+5. Click "Upload Mask Image" and choose an image
+6. You should see the image overlaid with green corner handles
+7. Try:
+   - Dragging the image to move it
+   - Dragging corner handles to resize
+   - Moving the opacity slider
+   - Clicking "Apply Mask" to merge or "Remove Mask" to cancel
+
+================================================================================
+SUMMARY OF FILES:
+================================================================================
+
+Modified files (DONE):
+- static/css/style-editor.css ✅
+- templates/editor.html ✅
+
+Files with new code (READY TO USE):
+- static/js/mask-methods.js ✅
+
+File that needs manual update (YOUR ACTION NEEDED):
+- static/js/editor.js ⚠️
+
+================================================================================

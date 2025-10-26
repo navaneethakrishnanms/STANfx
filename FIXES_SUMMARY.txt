@@ -1,0 +1,35 @@
+FIXES APPLIED TO YOUR EDITOR:
+=================================
+
+1. **SHAPE BUG FIX** ✅
+   - Fixed shapes moving from selected location
+   - Shapes now stay where drawn
+   - Proper drag-and-drop functionality for shapes
+   - Shape positions update correctly when dragged
+
+2. **MASK FEATURE ADDED** ✅
+   - New Mask tool button in sidebar
+   - Draw freehand paths to create masks
+   - Apply mask to extract/isolate image areas
+   - Clear mask to remove mask path
+
+3. **COLLAGE FEATURE ADDED** ✅
+   - 4 layout choices:
+     * 2x2 Grid (4 equal squares)
+     * Vertical Split (2 columns)
+     * Horizontal Split (2 rows)
+     * Triple Split (1 large + 2 small)
+   - Upload 4 images for collage
+   - Creates combined collage image
+
+FILES UPDATED:
+- editor.js - Complete rewrite with all fixes
+- editor.html - Added mask and collage tools/options
+- style-editor.css - Added styles for new features
+
+HOW TO USE:
+1. Shapes: Click Shape tool, draw shape, then click and drag to move it
+2. Mask: Click Mask tool, draw freehand path, click "Apply Mask"  
+3. Collage: Click Collage tool, choose layout, upload 4 images, click "Create Collage"
+
+All previous features (crop, flip, rotate, draw, text, filters) still work perfectly!
